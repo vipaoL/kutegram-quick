@@ -30,7 +30,11 @@ public:
         ScreenOrientationAuto
     };
 
+#if QT_VERSION >= 0x050000
     explicit QmlApplicationViewer(QObject *parent = 0);
+#else
+    explicit QmlApplicationViewer(QWidget *parent = 0);
+#endif
     virtual ~QmlApplicationViewer();
 
     void setMainQmlFile(const QString &file);
