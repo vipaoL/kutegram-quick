@@ -169,7 +169,7 @@ Rectangle {
         anchors.right: parent.right
         width: settingsText.width + 20 * kgScaling
         height: 40 * kgScaling
-        visible: false
+        visible: currentIndex == 0
 
         Text {
             id: settingsText
@@ -177,6 +177,14 @@ Rectangle {
             font.bold: true
             text: "SETTINGS"
             font.pixelSize: 12 * kgScaling
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.previousState = "AUTH";
+                root.state = "SETTINGS";
+            }
         }
     }
 

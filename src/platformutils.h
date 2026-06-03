@@ -18,6 +18,7 @@
 class PlatformUtils : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool notificationsEnabled READ notificationsEnabled WRITE setNotificationsEnabled NOTIFY notificationsEnabledChanged)
 private:
     QWidget* window;
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_OS_WINPHONE)
@@ -29,11 +30,15 @@ private:
     QPiglerAPI pigler;
     qint32 piglerId;
 #endif
+    bool m_notificationsEnabled;
 
 public:
     explicit PlatformUtils(QObject *parent = 0);
+    bool notificationsEnabled() const;
+    void setNotificationsEnabled(bool enabled);
 
 signals:
+    void notificationsEnabledChanged();
 
 public slots:
     void showAndRaise();

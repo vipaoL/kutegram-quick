@@ -41,6 +41,24 @@ Item {
                 target: authScreen
                 anchors.leftMargin: -root.width
             }
+        },
+        State {
+            name: "SETTINGS"
+            PropertyChanges {
+                target: mainScreen
+                anchors.leftMargin: -root.width
+                opacity: 0
+            }
+            PropertyChanges {
+                target: authScreen
+                anchors.leftMargin: -root.width
+                opacity: 0
+            }
+            PropertyChanges {
+                target: settingsScreen
+                anchors.leftMargin: 0
+                opacity: 1
+            }
         }
     ]
 
@@ -56,6 +74,7 @@ Item {
 
     property int currentFolderIndex: 0
     property bool authProgress: false
+    property string previousState: "AUTH"
 
     function setAuthProgress(visible) {
         authProgress = visible;
@@ -226,6 +245,20 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: parent.width
+    }
+
+    SettingsScreen {
+        id: settingsScreen
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: parent.width
+        anchors.leftMargin: parent.width
+        opacity: 0
+
+        onBackRequested: {
+            root.state = root.previousState;
+        }
     }
 
     SnackBar {

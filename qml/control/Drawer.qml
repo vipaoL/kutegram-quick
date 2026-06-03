@@ -226,6 +226,11 @@ Item {
                             ListElement {
                                 icon: "../../img/exit-to-app.png"
                                 name: "Log out"
+                                actionId: "logout"
+                            }
+                            ListElement {
+                                name: "Settings"
+                                actionId: "settings"
                             }
 //                            ListElement {
 //                                icon: "../../img/close.png"

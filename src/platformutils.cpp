@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include "debug.h"
+#include <QSettings>
 
 #if defined(Q_OS_WIN32) && QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
 #include <QtWinExtras/QtWin>
@@ -35,6 +36,9 @@ PlatformUtils::PlatformUtils(QObject *parent)
     , piglerId(-1)
 #endif
 {
+    QSettings settings;
+    m_notificationsEnabled = settings.value("notificationsEnabled", true).toBool();
+
     if (window) {
         window->setAttribute(Qt::WA_DeleteOnClose, false);
         window->setAttribute(Qt::WA_QuitOnClose, false);
@@ -162,6 +166,10 @@ void PlatformUtils::gotNewMessage(qint64 peerId, QString peerName, QString sende
         return;
     }
 
+    if (!m_notificationsEnabled) {
+        return;
+    }
+
     QVariantMap info;
     info["id"] = peerId;
     info["peerName"] = peerName;
@@ -226,6 +234,21 @@ void PlatformUtils::gotNewMessage(qint64 peerId, QString peerName, QString sende
     //TODO: vibrate
     //TODO: sound
     //TODO: blink
+}
+
+bool PlatformUtils::notificationsEnabled() const
+{
+    return m_notificationsEnabled;
+}
+
+void PlatformUtils::setNotificationsEnabled(bool enabled)
+{
+    if (m_notificationsEnabled != enabled) {
+        m_notificationsEnabled = enabled;
+        QSettings settings;
+        settings.setValue("notificationsEnabled", enabled);
+        emit notificationsEnabledChanged();
+    }
 }
 
 void openUrl(QUrl url)

@@ -24,13 +24,13 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            switch (index) {
-            case 0:
+            if (actionId == "logout") {
                 telegramClient.resetSession();
-                break;
-            case 1:
+            } else if (actionId == "settings") {
+                root.previousState = "MAIN";
+                root.state = "SETTINGS";
+            } else if (actionId == "quit") {
                 platformUtils.quit();
-                break;
             }
 
             drawerRoot.closeDrawer();
