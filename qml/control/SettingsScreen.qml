@@ -355,13 +355,30 @@ Item {
                     wrapMode: Text.Wrap
                 }
 
-                LineEdit {
-                    id: cacheDirInput
+                Row {
                     anchors.left: parent.left
                     anchors.right: parent.right
+                    spacing: 8 * kgScaling
 
-                    onTextChanged: {
-                        platformUtils.cacheDir = text;
+                    LineEdit {
+                        id: cacheDirInput
+                        width: parent.width - browseButton.width - parent.spacing
+
+                        onTextChanged: {
+                            platformUtils.cacheDir = text;
+                        }
+                    }
+
+                    Button {
+                        id: browseButton
+                        text: "Browse"
+
+                        onClicked: {
+                            var dir = platformUtils.selectFolder("Select Cache Directory", cacheDirInput.text);
+                            if (dir !== "") {
+                                cacheDirInput.text = dir;
+                            }
+                        }
                     }
                 }
             }

@@ -68,6 +68,8 @@ public:
     QString cacheDir() const { return m_cacheDir; }
     void setCacheDir(const QString &dir);
 
+    Q_INVOKABLE QString selectFolder(const QString &title = QString(), const QString &workingDir = QString());
+
 signals:
     void notificationsEnabledChanged();
     void proxySettingsChanged();

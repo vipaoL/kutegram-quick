@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include "debug.h"
+#include <QFileDialog>
 #include <QSettings>
 
 #if defined(Q_OS_WIN32) && QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
@@ -396,4 +397,15 @@ void openUrl(QUrl url)
 #else
     QDesktopServices::openUrl(url);
 #endif
+}
+
+QString PlatformUtils::selectFolder(const QString &title, const QString &workingDir)
+{
+    QString dir = QFileDialog::getExistingDirectory(
+        window,
+        title.isEmpty() ? tr("Select Directory") : title,
+        workingDir.isEmpty() ? m_cacheDir : workingDir,
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+    );
+    return dir;
 }
