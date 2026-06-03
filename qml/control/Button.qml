@@ -5,6 +5,7 @@ Item {
     signal clicked()
 
     property bool enabled: true
+    property string text: "Next"
 
     width: buttonText.width + 40 * kgScaling
     height: 40 * kgScaling
@@ -18,7 +19,7 @@ Item {
     Text {
         id: buttonText
         anchors.centerIn: parent
-        text: "Next"
+        text: buttonRoot.text
         font.bold: true
         color: "#FFFFFF"
         font.pixelSize: 12 * kgScaling

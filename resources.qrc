@@ -6,7 +6,7 @@
         <file>qml/control/LineEdit.qml</file>
         <file>qml/control/Spinner.qml</file>
         <file>qml/control/TopBar.qml</file>
-        <file>qml/auth/Button.qml</file>
+        <file>qml/control/Button.qml</file>
         <file>qml/auth/CodePage.qml</file>
         <file>qml/auth/IntroPage.qml</file>
         <file>qml/auth/PhonePage.qml</file>
