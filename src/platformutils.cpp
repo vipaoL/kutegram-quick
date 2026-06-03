@@ -38,6 +38,12 @@ PlatformUtils::PlatformUtils(QObject *parent)
 {
     QSettings settings;
     m_notificationsEnabled = settings.value("notificationsEnabled", true).toBool();
+    m_proxyEnabled = settings.value("proxyEnabled", false).toBool();
+    m_proxyType = settings.value("proxyType", "http").toString();
+    m_proxyHost = settings.value("proxyHost", "").toString();
+    m_proxyPort = settings.value("proxyPort", 1080).toInt();
+    m_proxyUser = settings.value("proxyUser", "").toString();
+    m_proxyPassword = settings.value("proxyPassword", "").toString();
 
     if (window) {
         window->setAttribute(Qt::WA_DeleteOnClose, false);
@@ -247,7 +253,81 @@ void PlatformUtils::setNotificationsEnabled(bool enabled)
         m_notificationsEnabled = enabled;
         QSettings settings;
         settings.setValue("notificationsEnabled", enabled);
+        settings.sync();
+        kgDebug() << "Notifications toggled:" << enabled;
         emit notificationsEnabledChanged();
+    }
+}
+
+void PlatformUtils::setProxyEnabled(bool enabled)
+{
+    if (m_proxyEnabled != enabled) {
+        m_proxyEnabled = enabled;
+        QSettings settings;
+        settings.setValue("proxyEnabled", enabled);
+        settings.sync();
+        kgDebug() << "Proxy toggled:" << enabled;
+        emit proxySettingsChanged();
+    }
+}
+
+void PlatformUtils::setProxyType(const QString &type)
+{
+    if (m_proxyType != type) {
+        m_proxyType = type;
+        QSettings settings;
+        settings.setValue("proxyType", type);
+        settings.sync();
+        kgDebug() << "Proxy type set to:" << type;
+        emit proxySettingsChanged();
+    }
+}
+
+void PlatformUtils::setProxyHost(const QString &host)
+{
+    if (m_proxyHost != host) {
+        m_proxyHost = host;
+        QSettings settings;
+        settings.setValue("proxyHost", host);
+        settings.sync();
+        kgDebug() << "Proxy host set to:" << host;
+        emit proxySettingsChanged();
+    }
+}
+
+void PlatformUtils::setProxyPort(int port)
+{
+    if (m_proxyPort != port) {
+        m_proxyPort = port;
+        QSettings settings;
+        settings.setValue("proxyPort", port);
+        settings.sync();
+        kgDebug() << "Proxy port set to:" << port;
+        emit proxySettingsChanged();
+    }
+}
+
+void PlatformUtils::setProxyUser(const QString &user)
+{
+    if (m_proxyUser != user) {
+        m_proxyUser = user;
+        QSettings settings;
+        settings.setValue("proxyUser", user);
+        settings.sync();
+        kgDebug() << "Proxy user set to:" << user;
+        emit proxySettingsChanged();
+    }
+}
+
+void PlatformUtils::setProxyPassword(const QString &password)
+{
+    if (m_proxyPassword != password) {
+        m_proxyPassword = password;
+        QSettings settings;
+        settings.setValue("proxyPassword", password);
+        settings.sync();
+        kgDebug() << "Proxy password updated";
+        emit proxySettingsChanged();
     }
 }
 

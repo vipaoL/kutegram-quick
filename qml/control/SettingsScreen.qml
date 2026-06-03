@@ -121,6 +121,226 @@ Item {
                     }
                 }
             }
+
+            Item {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 40 * kgScaling
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: proxyEnabledToggle.left
+                    anchors.rightMargin: 8 * kgScaling
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 2 * kgScaling
+
+                    Text {
+                        text: "Use Proxy"
+                        font.bold: true
+                        font.pixelSize: 13 * kgScaling
+                    }
+
+                    Text {
+                        text: "Configure HTTP or SOCKS5 proxy server"
+                        font.pixelSize: 11 * kgScaling
+                        color: "gray"
+                    }
+                }
+
+                ToggleSwitch {
+                    id: proxyEnabledToggle
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    checked: platformUtils.proxyEnabled
+
+                    onToggled: {
+                        platformUtils.proxyEnabled = newValue;
+                    }
+                }
+            }
+
+            Column {
+                id: proxyDetailsBox
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 12 * kgScaling
+                visible: proxyEnabledToggle.checked
+
+                Text {
+                    text: "Proxy Type"
+                    font.bold: true
+                    font.pixelSize: 12 * kgScaling
+                    color: "dimgray"
+                }
+
+                Row {
+                    id: proxyTypeSelector
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    spacing: 8 * kgScaling
+                    height: 32 * kgScaling
+
+                    property string selectedType: platformUtils.proxyType // "socks5" or "http"
+
+                    Rectangle {
+                        width: (parent.width - 8 * kgScaling) / 2
+                        height: parent.height
+                        radius: 4 * kgScaling
+                        color: parent.selectedType == "socks5" ? globalAccent : "lightgrey"
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "SOCKS5"
+                            color: parent.parent.selectedType == "socks5" ? "white" : "black"
+                            font.bold: true
+                            font.pixelSize: 12 * kgScaling
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                proxyTypeSelector.selectedType = "socks5";
+                                platformUtils.proxyType = "socks5";
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        width: (parent.width - 8 * kgScaling) / 2
+                        height: parent.height
+                        radius: 4 * kgScaling
+                        color: parent.selectedType == "http" ? globalAccent : "lightgrey"
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "HTTP"
+                            color: parent.parent.selectedType == "http" ? "white" : "black"
+                            font.bold: true
+                            font.pixelSize: 12 * kgScaling
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                proxyTypeSelector.selectedType = "http";
+                                platformUtils.proxyType = "http";
+                            }
+                        }
+                    }
+                }
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    spacing: 4 * kgScaling
+
+                    Text {
+                        text: "Host"
+                        font.bold: true
+                        font.pixelSize: 11 * kgScaling
+                        color: "dimgray"
+                    }
+
+                    LineEdit {
+                        id: proxyHostInput
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        onTextChanged: {
+                            platformUtils.proxyHost = text;
+                        }
+                    }
+                }
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    spacing: 4 * kgScaling
+
+                    Text {
+                        text: "Port"
+                        font.bold: true
+                        font.pixelSize: 11 * kgScaling
+                        color: "dimgray"
+                    }
+
+                    LineEdit {
+                        id: proxyPortInput
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        onTextChanged: {
+                            platformUtils.proxyPort = parseInt(text) || 1080;
+                        }
+                    }
+                }
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    spacing: 4 * kgScaling
+
+                    Text {
+                        text: "Username (optional)"
+                        font.bold: true
+                        font.pixelSize: 11 * kgScaling
+                        color: "dimgray"
+                    }
+
+                    LineEdit {
+                        id: proxyUserInput
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        onTextChanged: {
+                            platformUtils.proxyUser = text;
+                        }
+                    }
+                }
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    spacing: 4 * kgScaling
+
+                    Text {
+                        text: "Password (optional)"
+                        font.bold: true
+                        font.pixelSize: 11 * kgScaling
+                        color: "dimgray"
+                    }
+
+                    LineEdit {
+                        id: proxyPasswordInput
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        onTextChanged: {
+                            platformUtils.proxyPassword = text;
+                        }
+                    }
+                }
+
+                Button {
+                    id: restartConnectionButton
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    text: "Restart Connection"
+
+                    onClicked: {
+                        telegramClient.stop();
+                        telegramClient.start();
+                        snackBar.text = "Connection restarted";
+                    }
+                }
+            }
         }
+    }
+
+    Component.onCompleted: {
+        proxyHostInput.text = platformUtils.proxyHost;
+        proxyPortInput.text = platformUtils.proxyPort.toString();
+        proxyUserInput.text = platformUtils.proxyUser;
+        proxyPasswordInput.text = platformUtils.proxyPassword;
     }
 }
