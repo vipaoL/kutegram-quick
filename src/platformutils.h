@@ -25,6 +25,7 @@ class PlatformUtils : public QObject
     Q_PROPERTY(int proxyPort READ proxyPort WRITE setProxyPort NOTIFY proxySettingsChanged)
     Q_PROPERTY(QString proxyUser READ proxyUser WRITE setProxyUser NOTIFY proxySettingsChanged)
     Q_PROPERTY(QString proxyPassword READ proxyPassword WRITE setProxyPassword NOTIFY proxySettingsChanged)
+    Q_PROPERTY(QString cacheDir READ cacheDir WRITE setCacheDir NOTIFY cacheDirChanged)
 private:
     QWidget* window;
 #if !defined(Q_OS_SYMBIAN) && !defined(Q_OS_WINPHONE)
@@ -43,6 +44,7 @@ private:
     int m_proxyPort;
     QString m_proxyUser;
     QString m_proxyPassword;
+    QString m_cacheDir;
 
 public:
     explicit PlatformUtils(QObject *parent = 0);
@@ -63,9 +65,13 @@ public:
     void setProxyUser(const QString &user);
     void setProxyPassword(const QString &password);
 
+    QString cacheDir() const { return m_cacheDir; }
+    void setCacheDir(const QString &dir);
+
 signals:
     void notificationsEnabledChanged();
     void proxySettingsChanged();
+    void cacheDirChanged();
 
 public slots:
     void showAndRaise();

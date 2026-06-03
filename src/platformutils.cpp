@@ -44,6 +44,7 @@ PlatformUtils::PlatformUtils(QObject *parent)
     m_proxyPort = settings.value("proxyPort", 1080).toInt();
     m_proxyUser = settings.value("proxyUser", "").toString();
     m_proxyPassword = settings.value("proxyPassword", "").toString();
+    m_cacheDir = settings.value("cacheDir", "").toString();
 
     if (window) {
         window->setAttribute(Qt::WA_DeleteOnClose, false);
@@ -325,9 +326,17 @@ void PlatformUtils::setProxyPassword(const QString &password)
         m_proxyPassword = password;
         QSettings settings;
         settings.setValue("proxyPassword", password);
-        settings.sync();
-        kgDebug() << "Proxy password updated";
         emit proxySettingsChanged();
+    }
+}
+
+void PlatformUtils::setCacheDir(const QString &dir)
+{
+    if (m_cacheDir != dir) {
+        m_cacheDir = dir;
+        QSettings settings;
+        settings.setValue("cacheDir", dir);
+        emit cacheDirChanged();
     }
 }
 

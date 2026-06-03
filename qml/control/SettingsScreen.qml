@@ -334,6 +334,37 @@ Item {
                     }
                 }
             }
+
+            Column {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 4 * kgScaling
+
+                Text {
+                    text: "Cache Directory"
+                    font.bold: true
+                    font.pixelSize: 13 * kgScaling
+                }
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    text: "Leave empty for default location. Takes effect after app restart."
+                    font.pixelSize: 11 * kgScaling
+                    color: "gray"
+                    wrapMode: Text.Wrap
+                }
+
+                LineEdit {
+                    id: cacheDirInput
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    onTextChanged: {
+                        platformUtils.cacheDir = text;
+                    }
+                }
+            }
         }
     }
 
@@ -342,5 +373,6 @@ Item {
         proxyPortInput.text = platformUtils.proxyPort.toString();
         proxyUserInput.text = platformUtils.proxyUser;
         proxyPasswordInput.text = platformUtils.proxyPassword;
+        cacheDirInput.text = platformUtils.cacheDir;
     }
 }
