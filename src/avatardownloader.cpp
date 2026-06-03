@@ -57,8 +57,8 @@ void AvatarDownloader::setClient(QObject *client)
 
     if (!_client) return;
 
-    _client->sessionDirectory().mkdir("Kutegram_avatars");
-    _client->sessionDirectory().mkdir("Kutegram_photos");
+    QDir(_client->cacheDirectory()).mkdir("Kutegram_avatars");
+    QDir(_client->cacheDirectory()).mkdir("Kutegram_photos");
 
     connect(_client, SIGNAL(authorized(TgLongVariant)), this, SLOT(authorized(TgLongVariant)));
     connect(_client, SIGNAL(fileDownloaded(TgLongVariant,QString)), this, SLOT(fileDownloaded(TgLongVariant,QString)));
@@ -92,7 +92,7 @@ qint64 AvatarDownloader::downloadPhoto(TgObject photo)
     qint64 photoId = photo["id"].toLongLong();
 
     QString relativePath = "Kutegram_photos/" + QString::number(photoId) + ".jpg";
-    QString avatarFilePath = _client->sessionDirectory().absoluteFilePath(relativePath);
+    QString avatarFilePath = QDir(_client->cacheDirectory()).absoluteFilePath(relativePath);
 
     if (!_downloadedPhotos.contains(photoId)) {
         qint64 loadingId = _client->downloadFile(avatarFilePath, photo).toLongLong();
@@ -124,7 +124,7 @@ qint64 AvatarDownloader::downloadAvatar(TgObject peer)
     qint64 photoId = photo["photo_id"].toLongLong();
 
     QString relativePath = "Kutegram_avatars/" + QString::number(photoId) + ".jpg";
-    QString avatarFilePath = _client->sessionDirectory().absoluteFilePath(relativePath);
+    QString avatarFilePath = QDir(_client->cacheDirectory()).absoluteFilePath(relativePath);
 
     if (!_downloadedAvatars.contains(photoId)) {
         qint64 loadingId = _client->downloadFile(avatarFilePath, peer).toLongLong();
